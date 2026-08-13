@@ -39,13 +39,30 @@ def voyage():
 
 def embed(texts: list[str], input_type: str) -> list[list[float]]:
     """input_type='document' when indexing jobs, 'query' when searching.
-    Batched to stay within Voyage request limits."""
-    out, B = [], 128
-    for i in range(0, len(texts), B):
-        chunk = [t[:8000] for t in texts[i:i + B]]
-        resp = voyage().embed(chunk, model=MODEL, input_type=input_type)
-        out.extend(resp.embeddings)
-        time.sleep(0.2)
+
+    Throttled for Voyage's free tier (no payment method): 3 requests/min and
+    10K tokens/min. Small batches + a pause between requests keep us under both.
+    Add a card to lift the limits and you can raise BATCH / drop the sleep."""
+    from voyageai.error import RateLimitError
+    out, BATCH, GAP = [], 5, 21
+    total = (len(texts) + BATCH - 1) // BATCH
+    for n, i in enumerate(range(0, len(texts), BATCH), 1):
+        chunk = [t[:8000] for t in texts[i:i + BATCH]]
+        for attempt in range(6):
+            try:
+                resp = voyage().embed(chunk, model=MODEL, input_type=input_type)
+                out.extend(resp.embeddings)
+                break
+            except RateLimitError:
+                print(f"    rate limited — waiting 30s (attempt {attempt + 1})", flush=True)
+                time.sleep(30)
+        else:
+            raise RuntimeError("still rate limited after retries — add a payment "
+                               "method at dashboard.voyageai.com to lift limits")
+        done = min(i + BATCH, len(texts))
+        print(f"  batch {n}/{total}  ({done}/{len(texts)} jobs embedded)", flush=True)
+        if n < total:
+            time.sleep(GAP)      # stay under 3 requests/min on the free tier
     return out
 
 
