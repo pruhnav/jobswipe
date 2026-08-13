@@ -206,7 +206,7 @@ def from_ashby(slug, name):
         loc = j.get("location", "")
         text = j.get("descriptionPlain") or clean(j.get("descriptionHtml", ""))
         sal = None
-        tier = (j.get("compensation") or {}).get("compensationTierSummary", "")
+        tier = (j.get("compensation") or {}).get("compensationTierSummary") or ""
         nums = re.findall(r"\$([\d,]+)", tier)
         if len(nums) >= 2:
             sal = {"min": int(nums[0].replace(",", "")),
