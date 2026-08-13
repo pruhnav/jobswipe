@@ -18,6 +18,8 @@ Env (.env):
 """
 from __future__ import annotations
 import argparse, json, os, sys, time
+from dotenv import load_dotenv
+load_dotenv()
 import voyageai
 from pymongo import MongoClient, UpdateOne
 from pymongo.operations import SearchIndexModel
