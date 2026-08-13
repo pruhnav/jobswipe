@@ -1,0 +1,36 @@
+# Public ATS board slugs for JobSwipe's seed ingest.
+#
+# These are the three public, key-free job-board APIs. Each company's slug is
+# whatever appears in its careers-page URL, so this list is trivially rebuilt
+# from scratch — open a careers page, read the slug, verify it returns JSON:
+#
+#   greenhouse  https://boards-api.greenhouse.io/v1/boards/<slug>/jobs
+#   lever       https://api.lever.co/v0/postings/<slug>?mode=json
+#   ashby       https://api.ashbyhq.com/posting-api/job-board/<slug>
+#
+# If a run returns 0 jobs for a slug, the slug is wrong or the company moved
+# providers — open the URL above in a browser and adjust. `name` is a display
+# label; omit it and the slug is shown instead.
+
+companies:
+  greenhouse:
+    - {slug: stripe,       name: Stripe}
+    - {slug: databricks,   name: Databricks}
+    - {slug: airbnb,       name: Airbnb}
+    - {slug: coinbase,     name: Coinbase}
+    - {slug: doordash,     name: DoorDash}
+    - {slug: cloudflare,   name: Cloudflare}
+    - {slug: gitlab,       name: GitLab}
+    - {slug: robinhood,    name: Robinhood}
+    - {slug: samsara,      name: Samsara}
+    - {slug: benchling,    name: Benchling}
+  lever:
+    - {slug: netflix,      name: Netflix}
+    - {slug: plaid,        name: Plaid}
+    - {slug: nuro,         name: Nuro}
+  ashby:
+    - {slug: notion,       name: Notion}
+    - {slug: vercel,       name: Vercel}
+    - {slug: linear,       name: Linear}
+    - {slug: ramp,         name: Ramp}
+    - {slug: openai,       name: OpenAI}

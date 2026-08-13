@@ -1,0 +1,8 @@
+pymongo>=4.7
+voyageai>=0.3
+pypdf>=4.0
+flask>=3.0
+flask-cors>=4.0
+python-dotenv>=1.0
+# optional, for the Matches-view rationale:
+# anthropic>=0.40
